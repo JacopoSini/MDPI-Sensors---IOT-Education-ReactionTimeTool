@@ -37,28 +37,34 @@ namespace MDPISensors
 
         private void OpenLogFile()
         {
-            bool FileOpened;
+            bool FileOpened = false;
             try
             {
-                Microsoft.Win32.SaveFileDialog SDF = new Microsoft.Win32.SaveFileDialog();
-                SDF.Filter = "Log File (.log)";
-                SDF.Title = "Select the log file to be saved...";
+                Microsoft.Win32.SaveFileDialog SFD = new Microsoft.Win32.SaveFileDialog();
+                SFD.Filter = "Log File|*.log";
+                SFD.Title = "Choose where save the log file...";
                 string LogFilePath;
-                //while
-                bool save = (bool)SDF.ShowDialog();
-                if (save)
+                do
                 {
-                    LogFilePath = SDF.FileName;
-                    _LogSW = new System.IO.StreamWriter(LogFilePath);
-                }
-                else
-                {
-                    ;
-                }
+                    bool? save = SFD.ShowDialog();
+                    if (save == true)
+                    {
+                        LogFilePath = SFD.FileName;
+                        _LogSW = new System.IO.StreamWriter(LogFilePath);
+                        FileOpened = true;
+                        _LogSW.Write("EventName, TimeStamp, Delta [ms]\n");
+                        _LogSW.Write("FileOpened, " + DateTime.Now.ToUniversalTime().ToString() + "UTC, 0\n");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to save the log file.\nPlease chose another path.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); ;
+                    }
+                } while (!FileOpened);
             }
             catch(Exception ex)
             {
-                ;
+                MessageBox.Show("Unable to save the log file.\n Error: " + ex.ToString() + " \nPlease restart this software.","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                this.Close();
             }
         }
 
@@ -66,6 +72,7 @@ namespace MDPISensors
         {
             StartButton.Visibility = Visibility.Hidden;
             HourGlass.Visibility = Visibility.Visible;
+            OpenLogFile();
             StartMainTimer();
         }
 
@@ -76,6 +83,16 @@ namespace MDPISensors
             MainTimer.Interval = new TimeSpan(0, 0, 1);
             MainTimer.Start();
             _MainTimerStartTime = DateTime.Now;
+            if (_LogSW != null)
+            {
+                _LogSW.Write("FileOpened, " + _MainTimerStartTime.ToUniversalTime().ToString() + " UTC, 0\n");
+                _LogSW.FlushAsync();
+            }
+            else
+            {
+                //MessageBox.Show("Unable to save into the log file.\nFatal error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); ;
+                this.Close();
+            }
         }
 
         private void MainTimer_Tick(object? sender, EventArgs e)
@@ -102,7 +119,7 @@ namespace MDPISensors
                 uint ElapsedSecondsFromStart = (uint)Math.Floor((DateTime.Now - _MainTimerStartTime).TotalSeconds);
                 if (ElapsedSecondsFromStart > _ElapsedSeconds[i])
                 {
-                    ShowMessageWindow(_ElapsedSeconds[i]);
+                    ShowMessageWindow();
                     _LastElapsedIndex = ++i;   
                     IndexFound = true;
                 }
@@ -112,11 +129,35 @@ namespace MDPISensors
                 }
             }
         }
-
-        private void ShowMessageWindow(uint ElapsedTime)
+        private void ShowMessageWindow()
         {
-            MessageWindow MW = new MessageWindow(ElapsedTime);
+            MessageWindow MW = new MessageWindow();
             MW.ShowDialog();
+            if (_LogSW != null)
+            {
+                _LogSW.Write("MessageBoxOpening, " + MW.StartTime.ToUniversalTime().ToString() + " UTC, 0\n");
+                _LogSW.Write("AnswerByTheUser:" + (MW.YesAnswer?"Yes":"No") + ", " + MW.AnswerTime.ToUniversalTime().ToString() + " UTC, "+ (MW.AnswerTime - MW.StartTime).TotalMilliseconds + "\n");
+                _LogSW.FlushAsync();
+            }
+            else
+            {
+                //MessageBox.Show("Unable to save into the log file.\nFatal error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); ;
+                this.Close();
+            }
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_LogSW != null)
+            {
+                _LogSW.Write("FileClosed, " + DateTime.Now.ToUniversalTime().ToString() + " UTC, 0\n");
+                _LogSW.Flush();
+                _LogSW.Close();
+            }
+            else
+            {
+                MessageBox.Show("Unable to save into the log file.\nFatal error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); ;
+            }
         }
     }
 }
