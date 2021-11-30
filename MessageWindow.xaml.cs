@@ -19,19 +19,33 @@ namespace MDPISensors
     /// </summary>
     public partial class MessageWindow : Window
     {
-        public MessageWindow()
+        private uint _ElapsedTime;
+        private bool _YesAnswer = false;
+        private DateTime _AnswerTime;
+        public bool YesAnswer
         {
+            get { return _YesAnswer; }
+        }
+        public DateTime AnswerTime
+        {
+            get { return _AnswerTime; } 
+        }
+
+        public MessageWindow(uint ElapsedTime)
+        {
+            this._ElapsedTime = ElapsedTime;
             InitializeComponent();
         }
 
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _AnswerTime = DateTime.Now;
+            _YesAnswer = true;  
         }
 
         private void NoButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _AnswerTime = DateTime.Now;
         }
     }
 }

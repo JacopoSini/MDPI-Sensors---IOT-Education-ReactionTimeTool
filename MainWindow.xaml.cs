@@ -20,7 +20,12 @@ namespace MDPISensors
     /// </summary>
     public partial class MainWindow : Window
     {
+        /* Settings (the compiled version contains different values w.r.t. these ones */
+        private DateTime MainTimerStartTime;
+        private uint[] ElapsedSeconds = { 10u, 20u, 30u, 40u, 50u };
+        private int LastElapsedIndex = 0;
         private bool ISHourGlassSecondColorSet = false;    
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,10 +44,13 @@ namespace MDPISensors
             MainTimer.Tick += MainTimer_Tick;
             MainTimer.Interval = new TimeSpan(0, 0, 1);
             MainTimer.Start();
+            MainTimerStartTime = DateTime.Now;
         }
 
         private void MainTimer_Tick(object? sender, EventArgs e)
         {
+            bool IndexFound = false;
+
             ISHourGlassSecondColorSet = !(ISHourGlassSecondColorSet);
             if(ISHourGlassSecondColorSet)
             {
@@ -58,6 +66,26 @@ namespace MDPISensors
                 HourGlassLine3.Stroke = new SolidColorBrush(Colors.Black);
                 HourGlassLine4.Stroke = new SolidColorBrush(Colors.Black);
             }
+            for (int i = LastElapsedIndex; i < ElapsedSeconds.Length && !IndexFound; i++)
+            {
+                uint ElapsedSecondsFromStart = (uint)Math.Floor((DateTime.Now - MainTimerStartTime).TotalSeconds);
+                if (ElapsedSeconds[i] > ElapsedSecondsFromStart)
+                {
+                    LastElapsedIndex = i;   
+                    IndexFound = true;
+                    ShowMessageWindow(ElapsedSeconds[i]);
+                }
+                else
+                {
+                    ;
+                }
+            }
+        }
+
+        private void ShowMessageWindow(uint ElapsedTime)
+        {
+            MessageWindow MW = new MessageWindow(ElapsedTime);
+            MW.ShowDialog();
         }
     }
 }
