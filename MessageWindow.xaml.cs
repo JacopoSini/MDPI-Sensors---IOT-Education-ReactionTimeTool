@@ -40,12 +40,14 @@ namespace MDPISensors
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {
             _AnswerTime = DateTime.Now;
-            _YesAnswer = true;  
+            _YesAnswer = true;
+            this.Close();
         }
 
         private void NoButton_Click(object sender, RoutedEventArgs e)
         {
             _AnswerTime = DateTime.Now;
+            this.Close();
         }
     }
 }

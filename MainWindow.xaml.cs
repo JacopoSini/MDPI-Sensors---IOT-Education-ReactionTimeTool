@@ -21,14 +21,45 @@ namespace MDPISensors
     public partial class MainWindow : Window
     {
         /* Settings (the compiled version contains different values w.r.t. these ones */
-        private DateTime MainTimerStartTime;
-        private uint[] ElapsedSeconds = { 10u, 20u, 30u, 40u, 50u };
-        private int LastElapsedIndex = 0;
-        private bool ISHourGlassSecondColorSet = false;    
+        private uint[] _ElapsedSeconds = { 10u, 20u, 30u, 40u, 50u };
+
+        private DateTime _MainTimerStartTime;
+        private int _LastElapsedIndex = 0;
+        private bool _ISHourGlassSecondColorSet = false;
+        private System.IO.StreamWriter? _LogSW;
 
         public MainWindow()
         {
             InitializeComponent();
+            _LogSW = null;
+        }
+
+
+        private void OpenLogFile()
+        {
+            bool FileOpened;
+            try
+            {
+                Microsoft.Win32.SaveFileDialog SDF = new Microsoft.Win32.SaveFileDialog();
+                SDF.Filter = "Log File (.log)";
+                SDF.Title = "Select the log file to be saved...";
+                string LogFilePath;
+                //while
+                bool save = (bool)SDF.ShowDialog();
+                if (save)
+                {
+                    LogFilePath = SDF.FileName;
+                    _LogSW = new System.IO.StreamWriter(LogFilePath);
+                }
+                else
+                {
+                    ;
+                }
+            }
+            catch(Exception ex)
+            {
+                ;
+            }
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -44,15 +75,15 @@ namespace MDPISensors
             MainTimer.Tick += MainTimer_Tick;
             MainTimer.Interval = new TimeSpan(0, 0, 1);
             MainTimer.Start();
-            MainTimerStartTime = DateTime.Now;
+            _MainTimerStartTime = DateTime.Now;
         }
 
         private void MainTimer_Tick(object? sender, EventArgs e)
         {
             bool IndexFound = false;
 
-            ISHourGlassSecondColorSet = !(ISHourGlassSecondColorSet);
-            if(ISHourGlassSecondColorSet)
+            _ISHourGlassSecondColorSet = !(_ISHourGlassSecondColorSet);
+            if(_ISHourGlassSecondColorSet)
             {
                 HourGlassLine1.Stroke = new SolidColorBrush(Colors.LightGray);
                 HourGlassLine2.Stroke = new SolidColorBrush(Colors.LightGray);
@@ -66,14 +97,14 @@ namespace MDPISensors
                 HourGlassLine3.Stroke = new SolidColorBrush(Colors.Black);
                 HourGlassLine4.Stroke = new SolidColorBrush(Colors.Black);
             }
-            for (int i = LastElapsedIndex; i < ElapsedSeconds.Length && !IndexFound; i++)
+            for (int i = _LastElapsedIndex; i < _ElapsedSeconds.Length && !IndexFound; i++)
             {
-                uint ElapsedSecondsFromStart = (uint)Math.Floor((DateTime.Now - MainTimerStartTime).TotalSeconds);
-                if (ElapsedSecondsFromStart > ElapsedSeconds[i])
+                uint ElapsedSecondsFromStart = (uint)Math.Floor((DateTime.Now - _MainTimerStartTime).TotalSeconds);
+                if (ElapsedSecondsFromStart > _ElapsedSeconds[i])
                 {
-                    LastElapsedIndex = i;   
+                    ShowMessageWindow(_ElapsedSeconds[i]);
+                    _LastElapsedIndex = ++i;   
                     IndexFound = true;
-                    ShowMessageWindow(ElapsedSeconds[i]);
                 }
                 else
                 {
