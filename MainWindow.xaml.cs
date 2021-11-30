@@ -20,9 +20,44 @@ namespace MDPISensors
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool ISHourGlassSecondColorSet = false;    
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            StartButton.Visibility = Visibility.Hidden;
+            HourGlass.Visibility = Visibility.Visible;
+            StartMainTimer();
+        }
+
+        System.Windows.Threading.DispatcherTimer MainTimer = new System.Windows.Threading.DispatcherTimer();
+        private void StartMainTimer()
+        {
+            MainTimer.Tick += MainTimer_Tick;
+            MainTimer.Interval = new TimeSpan(0, 0, 1);
+            MainTimer.Start();
+        }
+
+        private void MainTimer_Tick(object? sender, EventArgs e)
+        {
+            ISHourGlassSecondColorSet = !(ISHourGlassSecondColorSet);
+            if(ISHourGlassSecondColorSet)
+            {
+                HourGlassLine1.Stroke = new SolidColorBrush(Colors.LightGray);
+                HourGlassLine2.Stroke = new SolidColorBrush(Colors.LightGray);
+                HourGlassLine3.Stroke = new SolidColorBrush(Colors.LightGray);
+                HourGlassLine4.Stroke = new SolidColorBrush(Colors.LightGray);
+            }
+            else
+            {
+                HourGlassLine1.Stroke = new SolidColorBrush(Colors.Black);
+                HourGlassLine2.Stroke = new SolidColorBrush(Colors.Black);
+                HourGlassLine3.Stroke = new SolidColorBrush(Colors.Black);
+                HourGlassLine4.Stroke = new SolidColorBrush(Colors.Black);
+            }
         }
     }
 }

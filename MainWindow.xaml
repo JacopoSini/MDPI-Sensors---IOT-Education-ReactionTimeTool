@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MDPISensors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MDPISensors" Height="200" Width="200" ResizeMode="NoResize" Cursor="Hand">
     <Grid>
-
+        <Canvas Name="HourGlass" Height="196" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" Visibility="Hidden">
+            <Line Name="HourGlassLine1" X1="60" Y1="40"
+                  X2="140" Y2="40"
+                  Stroke="Black"
+                  StrokeThickness="4"></Line>
+            <Line Name="HourGlassLine2" X1="60" Y1="140"
+                  X2="140" Y2="140"
+                  Stroke="Black"
+                  StrokeThickness="4"></Line>
+            <Line Name="HourGlassLine3" X1="60" Y1="40"
+                  X2="140" Y2="140"
+                  Stroke="Black"
+                  StrokeThickness="4"></Line>
+            <Line Name="HourGlassLine4" X1="140" Y1="40"
+                  X2="60" Y2="140"
+                  Stroke="Black"
+                  StrokeThickness="4"></Line>
+        </Canvas>
+        <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Center" Height="55" Margin="0,60,0,0" VerticalAlignment="Top" Width="136" Click="StartButton_Click"/>
     </Grid>
 </Window>
