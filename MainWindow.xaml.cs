@@ -69,7 +69,7 @@ namespace MDPISensors
             for (int i = LastElapsedIndex; i < ElapsedSeconds.Length && !IndexFound; i++)
             {
                 uint ElapsedSecondsFromStart = (uint)Math.Floor((DateTime.Now - MainTimerStartTime).TotalSeconds);
-                if (ElapsedSeconds[i] > ElapsedSecondsFromStart)
+                if (ElapsedSecondsFromStart > ElapsedSeconds[i])
                 {
                     LastElapsedIndex = i;   
                     IndexFound = true;
