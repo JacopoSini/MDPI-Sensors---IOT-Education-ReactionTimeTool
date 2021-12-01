@@ -50,7 +50,7 @@ namespace MDPISensors
                         _LogSW = new System.IO.StreamWriter(LogFilePath);
                         FileOpened = true;
                         _LogSW.Write("EventName, TimeStamp, Delta [ms]\n");
-                        _LogSW.Write("FileOpened, " + DateTime.Now.ToUniversalTime().ToString() + "UTC, 0\n");
+                        _LogSW.Write("FileChosen, " + DateTime.Now.ToUniversalTime().ToString() + " UTC, 0\n");
                     }
                     else
                     {

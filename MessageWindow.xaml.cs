@@ -21,6 +21,7 @@ namespace MDPISensors
     {
         private DateTime _StartTime;
         private bool _YesAnswer = false;
+        private bool _UnlockClosing = false;
         private DateTime _AnswerTime;
         public bool YesAnswer
         {
@@ -47,8 +48,9 @@ namespace MDPISensors
         public MessageWindow()
         {
             Random rand = new Random(DateTime.Now.Millisecond);
+            this.Closing += new System.ComponentModel.CancelEventHandler(MessageWindow_Closing);
             System.Media.SoundPlayer soundPlayer = new System.Media.SoundPlayer("Belligerent.wav");
-            soundPlayer.Play();
+            soundPlayer.Play(); // Play is run in a separate thread
             InitializeComponent();
 
             /* tested also with different scaling factors: PrimaryScreenHeight and Width scales subsequentially */
@@ -62,12 +64,26 @@ namespace MDPISensors
         {
             _AnswerTime = DateTime.Now;
             _YesAnswer = true;
+            _UnlockClosing = true;
             this.Close();
         }
         private void NoButton_Click(object sender, RoutedEventArgs e)
         {
             _AnswerTime = DateTime.Now;
+            _UnlockClosing = true;
             this.Close();
+        }
+
+        void MessageWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!_UnlockClosing)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                ;
+            }
         }
     }
 }
