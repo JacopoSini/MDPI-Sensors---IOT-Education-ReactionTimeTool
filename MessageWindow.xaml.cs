@@ -25,25 +25,25 @@ namespace MDPISensors
         private DateTime _AnswerTime;
         public bool YesAnswer
         {
-            get 
-            { 
-                return _YesAnswer; 
+            get
+            {
+                return _YesAnswer;
             }
         }
 
         public DateTime StartTime
         {
-            get 
-            { 
-                return _StartTime; 
+            get
+            {
+                return _StartTime;
             }
         }
         public DateTime AnswerTime
         {
-            get 
-            { 
-                return _AnswerTime; 
-            } 
+            get
+            {
+                return _AnswerTime;
+            }
         }
         public MessageWindow()
         {
@@ -54,11 +54,12 @@ namespace MDPISensors
             InitializeComponent();
 
             /* tested also with different scaling factors: PrimaryScreenHeight and Width scales subsequentially */
-            this.Top = rand.NextDouble()*(System.Windows.SystemParameters.PrimaryScreenHeight-this.Height);
+            this.Top = rand.NextDouble() * (System.Windows.SystemParameters.PrimaryScreenHeight - this.Height);
             this.Left = rand.NextDouble() * (System.Windows.SystemParameters.PrimaryScreenWidth - this.Width);
-           
+
             this._StartTime = DateTime.Now;
             this.Topmost = true;
+            StartTopWindowTimer();
         }
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -84,6 +85,19 @@ namespace MDPISensors
             {
                 ;
             }
+        }
+
+
+        System.Windows.Threading.DispatcherTimer TopWindowTimer = new System.Windows.Threading.DispatcherTimer();
+        private void StartTopWindowTimer()
+        {
+            TopWindowTimer.Tick += MainTimer_Tick;
+            TopWindowTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
+            TopWindowTimer.Start();
+        }
+        private void MainTimer_Tick(object? sender, EventArgs e)
+        {
+            this.Topmost = true;
         }
     }
 }

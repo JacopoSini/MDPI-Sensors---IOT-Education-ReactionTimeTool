@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MDPISensors"
         mc:Ignorable="d"
-        Title="MDPISensors" Height="200" Width="200" ResizeMode="NoResize" Cursor="Hand" Closing="MainWindow_Closing">
+        Title="Remote lecture tool" Height="200" Width="200" ResizeMode="NoResize" Cursor="Hand" Closing="MainWindow_Closing">
     <Grid>
         <Canvas Name="HourGlass" Height="196" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" Visibility="Hidden">
             <Line Name="HourGlassLine1" X1="60" Y1="40"
