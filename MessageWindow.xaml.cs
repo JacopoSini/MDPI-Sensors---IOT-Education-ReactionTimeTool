@@ -24,31 +24,43 @@ namespace MDPISensors
         private DateTime _AnswerTime;
         public bool YesAnswer
         {
-            get { return _YesAnswer; }
+            get 
+            { 
+                return _YesAnswer; 
+            }
         }
 
         public DateTime StartTime
         {
-            get { return _StartTime; }
+            get 
+            { 
+                return _StartTime; 
+            }
         }
         public DateTime AnswerTime
         {
-            get { return _AnswerTime; } 
+            get 
+            { 
+                return _AnswerTime; 
+            } 
         }
-
         public MessageWindow()
         {
+            Random rand = new Random();
             InitializeComponent();
+
+            /* tested also with different scaling factors: PrimaryScreenHeight and Width scales subsequentially */
+            this.Top = rand.NextDouble()*(System.Windows.SystemParameters.PrimaryScreenHeight-this.Height);
+            this.Left = rand.NextDouble() * (System.Windows.SystemParameters.PrimaryScreenWidth - this.Width);
+           
             this._StartTime = DateTime.Now;
         }
-
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {
             _AnswerTime = DateTime.Now;
             _YesAnswer = true;
             this.Close();
         }
-
         private void NoButton_Click(object sender, RoutedEventArgs e)
         {
             _AnswerTime = DateTime.Now;
@@ -56,3 +68,5 @@ namespace MDPISensors
         }
     }
 }
+
+/* [EOF] */

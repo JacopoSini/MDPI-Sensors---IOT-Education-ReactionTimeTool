@@ -27,14 +27,11 @@ namespace MDPISensors
         private int _LastElapsedIndex = 0;
         private bool _ISHourGlassSecondColorSet = false;
         private System.IO.StreamWriter? _LogSW;
-
         public MainWindow()
         {
             InitializeComponent();
             _LogSW = null;
         }
-
-
         private void OpenLogFile()
         {
             bool FileOpened = false;
@@ -67,7 +64,6 @@ namespace MDPISensors
                 this.Close();
             }
         }
-
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             StartButton.Visibility = Visibility.Hidden;
@@ -75,7 +71,6 @@ namespace MDPISensors
             OpenLogFile();
             StartMainTimer();
         }
-
         System.Windows.Threading.DispatcherTimer MainTimer = new System.Windows.Threading.DispatcherTimer();
         private void StartMainTimer()
         {
@@ -94,7 +89,6 @@ namespace MDPISensors
                 this.Close();
             }
         }
-
         private void MainTimer_Tick(object? sender, EventArgs e)
         {
             bool IndexFound = false;
@@ -145,7 +139,6 @@ namespace MDPISensors
                 this.Close();
             }
         }
-
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_LogSW != null)
@@ -161,3 +154,5 @@ namespace MDPISensors
         }
     }
 }
+
+/* [EOF] */
