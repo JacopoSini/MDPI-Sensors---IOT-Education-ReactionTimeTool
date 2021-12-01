@@ -46,7 +46,7 @@ namespace MDPISensors
         }
         public MessageWindow()
         {
-            Random rand = new Random();
+            Random rand = new Random(DateTime.Now.Millisecond);
             System.Media.SoundPlayer soundPlayer = new System.Media.SoundPlayer("Belligerent.wav");
             soundPlayer.Play();
             InitializeComponent();
@@ -56,6 +56,7 @@ namespace MDPISensors
             this.Left = rand.NextDouble() * (System.Windows.SystemParameters.PrimaryScreenWidth - this.Width);
            
             this._StartTime = DateTime.Now;
+            this.Topmost = true;
         }
         private void YesButton_Click(object sender, RoutedEventArgs e)
         {
