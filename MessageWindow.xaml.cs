@@ -47,6 +47,8 @@ namespace MDPISensors
         public MessageWindow()
         {
             Random rand = new Random();
+            System.Media.SoundPlayer soundPlayer = new System.Media.SoundPlayer("Belligerent.wav");
+            soundPlayer.Play();
             InitializeComponent();
 
             /* tested also with different scaling factors: PrimaryScreenHeight and Width scales subsequentially */
