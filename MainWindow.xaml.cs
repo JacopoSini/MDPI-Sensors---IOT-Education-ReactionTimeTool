@@ -21,7 +21,7 @@ namespace MDPISensors
     public partial class MainWindow : Window
     {
         /* Settings (the compiled version contains different values w.r.t. these ones */
-        private uint[] _ElapsedSeconds = { 10u, 20u, 30u, 40u, 50u };
+        private uint[] _ElapsedSeconds = { 10*60u, 20*60u, 30*60u, 40*60u, 47*60u };
 
         private DateTime _MainTimerStartTime;
         private int _LastElapsedIndex = 0;
